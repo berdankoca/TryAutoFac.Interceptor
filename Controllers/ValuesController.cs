@@ -12,16 +12,19 @@ namespace TryAutoFac.Interceptor.Controllers
     // [Intercept(typeof(AuthorizationInterceptor))]
     public class ValuesController : ControllerBase
     {
-        private readonly IFooService _fooService;
-        public ValuesController(IFooService fooService)
+        public IFooService _fooService { get; set; }
+
+        public IBoo _testBoo { get; set; }
+
+        public ValuesController()
         {
-            _fooService = fooService;
+            // _fooService = fooService;
         }
         // GET api/values
         [HttpGet]
         public virtual ActionResult<IEnumerable<string>> Get()
         {
-            // _fooService.Say("Hi");
+            _fooService.Say("Hi");
 
             return new string[] { "value1", "value2" };
         }

@@ -37,6 +37,7 @@ namespace TryAutoFac.Interceptor
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             var builder = new ContainerBuilder();
+            builder.Populate(services);
 
             builder
                 .RegisterType<AuthorizationInterceptor>();
@@ -53,19 +54,27 @@ namespace TryAutoFac.Interceptor
             //     .EnableClassInterceptors()
             //     .InterceptedBy(typeof(AuthorizationInterceptor));
 
+
             builder
-                .RegisterType<ValuesController>()
-                .EnableClassInterceptors()
-                .InterceptedBy(typeof(AuthorizationInterceptor));
+                .RegisterType<Boo>()
+                .As<IBoo>()
+                .InstancePerDependency();
 
             builder
                 .RegisterType<FooService>()
                 .As<IFooService>()
-                .InstancePerDependency();
+                .InstancePerDependency()
+                .PropertiesAutowired();
             // .EnableInterfaceInterceptors()
             // .InterceptedBy(typeof(AuthorizationInterceptor));
 
-            builder.Populate(services);
+            builder
+                .RegisterType<ValuesController>()
+                .InstancePerDependency()
+                .PropertiesAutowired();
+            // .EnableClassInterceptors()
+            // .InterceptedBy(typeof(AuthorizationInterceptor));
+
             IContainer container = builder.Build();
 
             var newServices = new AutofacServiceProvider(container);
